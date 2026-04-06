@@ -18,6 +18,7 @@ function Detector({ onAlert }) {
   const [lastAlertTime, setLastAlertTime] = useState(0);
   const [visualAlert, setVisualAlert] = useState(null);
   const [cameraError, setCameraError] = useState(null);
+  const audioContextRef = useRef(null);
 
   useEffect(() => {
     const loadModel = async () => {
@@ -34,8 +35,49 @@ function Detector({ onAlert }) {
     loadModel();
   }, []);
 
+  const playAlertSound = () => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    
+    const ctx = audioContextRef.current;
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+
+    const playBeep = (delay) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime + delay);
+      
+      gain.gain.setValueAtTime(0, ctx.currentTime + delay);
+      gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + delay + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.1);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.start(ctx.currentTime + delay);
+      osc.stop(ctx.currentTime + delay + 0.1);
+    };
+
+    // Triple beep
+    playBeep(0);
+    playBeep(0.2);
+    playBeep(0.4);
+  };
+
   const startCamera = async () => {
     setCameraError(null);
+    
+    // Initialize/Resume audio on user interaction
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    } else if (audioContextRef.current.state === 'suspended') {
+      audioContextRef.current.resume();
+    }
     
     if (!window.isSecureContext) {
       setCameraError("Camera access requires a secure (HTTPS) connection. Please check your URL.");
@@ -105,6 +147,7 @@ function Detector({ onAlert }) {
               });
               setLastAlertTime(now);
               setVisualAlert(`${p.class.toUpperCase()} DETECTED!`);
+              playAlertSound();
               setTimeout(() => setVisualAlert(null), 2000);
             }
           });
