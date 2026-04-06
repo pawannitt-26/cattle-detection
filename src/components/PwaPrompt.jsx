@@ -84,9 +84,21 @@ function PwaPrompt() {
         <button 
           onClick={handleInstall}
           className="btn-primary"
-          style={{ gap: '12px', fontSize: '1rem' }}
+          style={{ 
+            gap: '12px', 
+            fontSize: '1rem',
+            background: 'linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%)',
+            boxShadow: '0 8px 20px rgba(27, 67, 50, 0.25)',
+            border: 'none',
+            padding: '16px 24px',
+            borderRadius: '16px',
+            color: 'white',
+            fontWeight: 700,
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
         >
-          <Download size={20} />
+          <Download size={22} />
           Add to Home Screen
         </button>
       </div>

@@ -68,6 +68,71 @@ const PEST_DATA = [
     icon: Leaf,
     color: '#3f6212',
     bg: '#f0fdf4'
+  },
+  {
+    id: 6,
+    name: 'Cotton Bollworm',
+    scientific: 'Helicoverpa armigera',
+    threat: 'Critical',
+    crops: ['Cotton', 'Chickpea', 'Tomato'],
+    description: 'Highly polyphagous pest that bores into reproductive parts, causing direct yield loss.',
+    prevention: 'Planting trap crops like marigold and sunflower around the field.',
+    solution: 'Use NPV (Nuclear Polyhedrosis Virus) or neem-based biopesticides.',
+    icon: Bug,
+    color: '#991b1b',
+    bg: '#fee2e2'
+  },
+  {
+    id: 7,
+    name: 'Spider Mites',
+    scientific: 'Tetranychidae',
+    threat: 'Moderate',
+    crops: ['Bean', 'Cucumber', 'Strawberry'],
+    description: 'Minute pests that spin silk webs and suck plant juices, causing stippling on leaves.',
+    prevention: 'Maintain high humidity and avoid excessive nitrogen fertilizers.',
+    solution: 'Sulfur-based sprays or predatory mites (Phytoseiulus persimilis).',
+    icon: Wind,
+    color: '#92400e',
+    bg: '#fef3c7'
+  },
+  {
+    id: 8,
+    name: 'Mealybugs',
+    scientific: 'Pseudococcidae',
+    threat: 'High',
+    crops: ['Grapes', 'Citrus', 'Papaya'],
+    description: 'White, waxy-coated insects that cluster in leaf axils and secrete honey-dew leading to sooty mold.',
+    prevention: 'Destroy ant nests around plants, as ants "farm" and protect mealybugs.',
+    solution: 'Horticultural oils or alcohol-based spot treatments for small areas.',
+    icon: ShieldAlert,
+    color: '#b91c1c',
+    bg: '#fef2f2'
+  },
+  {
+    id: 9,
+    name: 'Diamondback Moth',
+    scientific: 'Plutella xylostella',
+    threat: 'High',
+    crops: ['Cabbage', 'Cauliflower', 'Mustard'],
+    description: 'Small caterpillars that eat the lower leaf surface, leaving "windows" of upper epidermis.',
+    prevention: 'Crop rotation and intercropping with carrot or tomato.',
+    solution: 'Bacillus thuringiensis (Bt) sprays used at short intervals.',
+    icon: Leaf,
+    color: '#3f6212',
+    bg: '#f0fdf4'
+  },
+  {
+    id: 10,
+    name: 'Slugs & Snails',
+    scientific: 'Gastropoda',
+    threat: 'Low-Moderate',
+    crops: ['Lettuce', 'Hostas', 'Seedlings'],
+    description: 'Nocturnal mollusks that chew large, ragged holes in leaves and can eat entire seedlings overnight.',
+    prevention: 'Remove garden debris and use copper tape barriers around beds.',
+    solution: 'Iron phosphate baits or beer traps at ground level.',
+    icon: Droplets,
+    color: '#1e40af',
+    bg: '#dbeafe'
   }
 ];
 
