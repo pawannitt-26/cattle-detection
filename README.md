@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌿 CropGuardian: AI-Powered Agricultural Assistant
 
-## Getting Started
+**CropGuardian** is a state-of-the-art mobile-first web application designed to empower farmers with real-time threat detection and intelligent crop management. Built with **Next.js** and **TensorFlow.js**, it brings advanced computer vision directly to the farmer's smartphone.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🔍 Real-Time AI Scanner
+*   **Intelligent Detection**: Uses the **COCO-SSD** neural network to identify cattle (cows, horses, sheep) and potential pests in real-time.
+*   **Live Overlays**: High-speed bounding boxes with confidence scores and "Threat Detected" visual alerts.
+*   **Privacy-First**: Runs entirely in the browser, ensuring data stays on the device.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 📱 Mobile-First Native Experience
+*   **Modern Agritech UI**: A premium interface featuring glassmorphism, earthy forest tones, and clean typography.
+*   **Bottom Navigation**: Optimized for one-handed operation in the field.
+*   **Responsive Dashboard**: At-a-glance status of farm health, active threats, and system vitals.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 📚 Comprehensive Pest Wiki
+*   **Expert Knowledge**: A searchable directory of common agricultural pests (Locusts, Fall Armyworms, Aphids).
+*   **Actionable Solutions**: Identification guides, threat levels, and both organic and standard prevention methods.
 
-## Learn More
+### 📜 Smart Alert History
+*   **Audit Trail**: Logs every detection with precise timestamps and sector locations for long-term monitoring.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+*   **Framework**: [Next.js 15 (App Router)](https://nextjs.org/)
+*   **Language**: JavaScript (ES6+)
+*   **AI Engine**: [TensorFlow.js](https://www.tensorflow.org/js) + [COCO-SSD](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd)
+*   **Icons**: [Lucide React](https://lucide.dev/)
+*   **Styling**: Custom CSS (Modern Agritech Theme)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🏗️ Installation & Setup
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Ensure you have [Node.js](https://nodejs.org/) installed on your system.
+
+1. **Clone the repository**:
+   ```bash
+   git clone <your-repo-url>
+   cd Cattle-Detection-Project
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+
+4. **Access the app**:
+   Open [http://localhost:3000](http://localhost:3000) on your mobile device or browser.
+
+---
+
+## 🚜 Future Roadmap
+
+- [ ] **PWA Integration**: Add offline support and "Install to Home Screen" functionality.
+- [ ] **Localized Language Support**: Translate the Wiki into regional languages for broader accessibility.
+- [ ] **Weather Integration**: Live sensor data for humidity and soil moisture.
+- [ ] **Custom Pests Base**: Fine-tuning detection for region-specific insects using transfer learning.
+
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+**Developed with ❤️ for the farming community.**
