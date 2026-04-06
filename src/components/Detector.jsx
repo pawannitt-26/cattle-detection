@@ -17,6 +17,7 @@ function Detector({ onAlert }) {
   const [detections, setDetections] = useState([]);
   const [lastAlertTime, setLastAlertTime] = useState(0);
   const [visualAlert, setVisualAlert] = useState(null);
+  const [cameraError, setCameraError] = useState(null);
 
   useEffect(() => {
     const loadModel = async () => {
@@ -34,17 +35,24 @@ function Detector({ onAlert }) {
   }, []);
 
   const startCamera = async () => {
+    setCameraError(null);
+    
+    if (!window.isSecureContext) {
+      setCameraError("Camera access requires a secure (HTTPS) connection. Please check your URL.");
+      return;
+    }
+
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: 'environment',
-            width: { ideal: 640 },
-            height: { ideal: 480 }
+          video: { 
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
           },
           audio: false,
         });
-
+        
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
           videoRef.current.onloadedmetadata = () => {
@@ -54,8 +62,16 @@ function Detector({ onAlert }) {
         }
       } catch (err) {
         console.error("Error accessing webcam:", err);
-        alert("Webcam error: " + err.message);
+        if (err.name === 'NotAllowedError') {
+          setCameraError("Camera permission denied. Please enable camera access in your browser settings and refresh.");
+        } else if (err.name === 'NotFoundError') {
+          setCameraError("No camera found on this device.");
+        } else {
+          setCameraError(`Camera Error: ${err.message}`);
+        }
       }
+    } else {
+      setCameraError("Your browser does not support camera access.");
     }
   };
 
@@ -168,7 +184,7 @@ function Detector({ onAlert }) {
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 {isLoading ? <RefreshCw className="animate-spin" size={18} /> : <Camera size={20} />}
               </div>
-              <span>{isLoading ? 'Initializing...' : 'Start Scanner'}</span>
+              <span>{isLoading ? 'Initializing...' : 'Start'}</span>
             </button>
           ) : (
             <button
@@ -183,7 +199,7 @@ function Detector({ onAlert }) {
                 boxShadow: '0 8px 20px rgba(239, 68, 68, 0.25)'
               }}
             >
-              Stop Scanner
+              Stop
             </button>
           )}
         </div>
@@ -214,6 +230,31 @@ function Detector({ onAlert }) {
             }
           }
         `}</style>
+        {cameraError && (
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            background: 'rgba(239, 68, 68, 0.9)',
+            color: 'white',
+            padding: '24px',
+            borderRadius: '24px',
+            textAlign: 'center',
+            width: '80%',
+            zIndex: 30,
+            backdropFilter: 'blur(10px)',
+            border: '2px solid white'
+          }}>
+            <AlertCircle size={40} style={{ marginBottom: '12px', margin: '0 auto 12px auto' }} />
+            <h4 style={{ fontWeight: 800, marginBottom: '8px' }}>Camera Blocked</h4>
+            <p style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>{cameraError}</p>
+            <button onClick={startCamera} style={{ marginTop: '16px', background: 'white', color: '#ef4444', border: 'none', padding: '8px 20px', borderRadius: '12px', fontWeight: 700, cursor: 'pointer' }}>
+               Retry Access
+            </button>
+          </div>
+        )}
+
         {isLoading && (
           <div style={{ color: 'white', textAlign: 'center', zIndex: 20 }}>
             <RefreshCw size={40} className="animate-spin" style={{ marginBottom: '12px', opacity: 0.5 }} />

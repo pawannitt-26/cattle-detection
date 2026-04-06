@@ -101,7 +101,8 @@ h1, h2, h3, .brand {
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
-  padding-bottom: calc(var(--nav-height) + 20px);
+  padding-bottom: 120px; /* Increased to avoid overlap with bottom nav */
+  scroll-padding-top: 100px; /* Space for the sticky header */
 }
 
 @media (min-width: 768px) {

@@ -38,13 +38,8 @@ function PwaPrompt() {
   if (!showPrompt) return null;
 
   return (
-    <div style={{
+    <div className="pwa-prompt-container" style={{
       position: 'fixed',
-      bottom: '100px',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      width: 'calc(100% - 40px)',
-      maxWidth: '460px',
       zIndex: 2000,
       animation: 'slideUpPrompt 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
     }}>
@@ -107,12 +102,28 @@ function PwaPrompt() {
         </button>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes slideUpPrompt {
-          from { opacity: 0; transform: translate(-50%, 40px); }
-          to { opacity: 1; transform: translate(-50%, 0); }
+      <style jsx>{`
+        .pwa-prompt-container {
+          bottom: 100px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: calc(100% - 40px);
+          max-width: 460px;
         }
-      `}} />
+        @media (min-width: 768px) {
+          .pwa-prompt-container {
+            bottom: 40px;
+            left: auto;
+            right: 40px;
+            transform: none;
+            width: 400px;
+          }
+        }
+        @keyframes slideUpPrompt {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 }

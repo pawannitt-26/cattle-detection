@@ -14,6 +14,10 @@ export default function Home() {
   const [alerts, setAlerts] = useState([
     { id: 1, type: 'Cattle', time: '14:24:12', status: 'Warning', label: 'COW detected in Sector 4' },
     { id: 2, type: 'Pest', time: '10:15:05', status: 'Danger', label: 'LOCUST Cluster in Sector 2' },
+    { id: 3, type: 'Pest', time: '09:45:22', status: 'Warning', label: 'APHID activity in Sector 1' },
+    { id: 4, type: 'Cattle', time: '08:12:10', status: 'Safe', label: 'SHEEP flock moved to North' },
+    { id: 5, type: 'Pest', time: '07:30:00', status: 'Danger', label: 'BOLLWORM alert in Cotton' },
+    { id: 6, type: 'System', time: '06:00:00', status: 'Safe', label: 'Morning scan complete - 0 hazards' },
   ]);
 
   const addAlert = (newAlert) => {
@@ -34,7 +38,18 @@ export default function Home() {
 
       {/* Main Content Area */}
       <div className="main-content-flow">
-        <header className="mobile-only" style={{ padding: '24px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <header className="mobile-only" style={{ 
+          padding: '16px 20px', 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          position: 'sticky',
+          top: 0,
+          background: 'rgba(248, 251, 249, 0.8)',
+          backdropFilter: 'blur(20px)',
+          zIndex: 1100,
+          borderBottom: '1px solid rgba(0,0,0,0.05)'
+        }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
              <div style={{ background: '#2d6a4f', padding: '10px', borderRadius: '12px' }}>
                 <Bug color="white" size={24} strokeWidth={2.5} />
