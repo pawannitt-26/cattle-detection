@@ -37,14 +37,14 @@ function Detector({ onAlert }) {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { 
+          video: {
             facingMode: 'environment',
             width: { ideal: 640 },
             height: { ideal: 480 }
           },
           audio: false,
         });
-        
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
           videoRef.current.onloadedmetadata = () => {
@@ -76,7 +76,7 @@ function Detector({ onAlert }) {
         try {
           const predictions = await model.detect(videoRef.current);
           setDetections(predictions);
-          
+
           predictions.forEach(p => {
             const now = Date.now();
             if (p.score > 0.5 && (CATTLE_LABELS.includes(p.class) || THREAT_LABELS.includes(p.class)) && (now - lastAlertTime > 3000)) {
@@ -112,19 +112,19 @@ function Detector({ onAlert }) {
     if (!canvasRef.current) return;
     const ctx = canvasRef.current.getContext('2d');
     ctx.clearRect(0, 0, 640, 480);
-    
+
     predictions.forEach(p => {
       const isCattle = CATTLE_LABELS.includes(p.class);
       const isThreat = THREAT_LABELS.includes(p.class);
       const [x, y, width, height] = p.bbox;
-      
+
       ctx.strokeStyle = isCattle ? '#f59e0b' : (isThreat ? '#ef4444' : '#2d6a4f');
       ctx.lineWidth = 4;
       ctx.strokeRect(x, y, width, height);
-      
+
       ctx.fillStyle = isCattle ? '#f59e0b' : (isThreat ? '#ef4444' : '#2d6a4f');
       ctx.fillRect(x, y - 30, ctx.measureText(p.class).width + 30, 30);
-      
+
       ctx.fillStyle = 'white';
       ctx.font = 'bold 16px Inter';
       ctx.fillText(`${p.class}`, x + 10, y - 8);
@@ -134,84 +134,120 @@ function Detector({ onAlert }) {
   return (
     <div className="detector-container" style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <div className="glass-card" style={{ padding: '24px', borderRadius: '24px', marginBottom: '20px' }}>
-         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-               <div style={{ background: isStreaming ? '#dcfce7' : '#fee2e2', padding: '10px', borderRadius: '12px' }}>
-                  {isStreaming ? <Shield color="#166534" size={20} /> : <ShieldOff color="#991b1b" size={20} />}
-               </div>
-               <div>
-                 <h3 style={{ fontSize: '1rem', color: '#1b4332', fontWeight: 700 }}>AI Scanner</h3>
-                 <p style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                   {isStreaming ? 'Detecting...' : 'System Idle'}
-                 </p>
-               </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ background: isStreaming ? '#dcfce7' : '#fee2e2', padding: '10px', borderRadius: '12px' }}>
+              {isStreaming ? <Shield color="#166534" size={20} /> : <ShieldOff color="#991b1b" size={20} />}
             </div>
-            
-            {!isStreaming ? (
-              <button 
-                onClick={startCamera} 
-                className="btn-primary" 
-                style={{ width: 'auto', padding: '10px 20px', borderRadius: '12px', fontSize: '0.85rem' }}
-                disabled={isLoading}
-              >
-                {isLoading ? <RefreshCw className="animate-spin" size={18} /> : <Camera size={18} />}
-                Start
-              </button>
-            ) : (
-              <button onClick={stopCamera} className="btn-primary" style={{ background: '#ef4444', width: 'auto', padding: '10px 20px', borderRadius: '12px', fontSize: '0.85rem' }}>
-                Stop
-              </button>
-            )}
-         </div>
+            <div>
+              <h3 style={{ fontSize: '1rem', color: '#1b4332', fontWeight: 700 }}>AI Scanner</h3>
+              <p style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                {isStreaming ? 'Detecting...' : 'System Idle'}
+              </p>
+            </div>
+          </div>
+
+          {!isStreaming ? (
+            <button
+              onClick={startCamera}
+              className="btn-primary"
+              style={{
+                width: 'auto',
+                padding: '12px 28px',
+                borderRadius: '16px',
+                fontSize: '0.9rem',
+                background: 'linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%)',
+                boxShadow: '0 8px 20px rgba(27, 67, 50, 0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '10px'
+              }}
+              disabled={isLoading}
+            >
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                {isLoading ? <RefreshCw className="animate-spin" size={18} /> : <Camera size={20} />}
+              </div>
+              <span>{isLoading ? 'Initializing...' : 'Start Scanner'}</span>
+            </button>
+          ) : (
+            <button
+              onClick={stopCamera}
+              className="btn-primary"
+              style={{
+                background: '#ef4444',
+                width: 'auto',
+                padding: '12px 28px',
+                borderRadius: '16px',
+                fontSize: '0.9rem',
+                boxShadow: '0 8px 20px rgba(239, 68, 68, 0.25)'
+              }}
+            >
+              Stop Scanner
+            </button>
+          )}
+        </div>
       </div>
 
-      <div style={{ 
-        position: 'relative', 
-        borderRadius: '24px', 
-        overflow: 'hidden', 
-        background: '#000', 
-        height: '400px', 
-        width: '100%',
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        border: '4px solid white',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
-      }}>
+      <div
+        className="camera-container"
+        style={{
+          position: 'relative',
+          borderRadius: '24px',
+          overflow: 'hidden',
+          background: '#000',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: '4px solid white',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
+        }}
+      >
+        <style jsx>{`
+          .camera-container {
+            height: 400px;
+          }
+          @media (min-width: 1024px) {
+            .camera-container {
+              height: 600px;
+            }
+          }
+        `}</style>
         {isLoading && (
           <div style={{ color: 'white', textAlign: 'center', zIndex: 20 }}>
             <RefreshCw size={40} className="animate-spin" style={{ marginBottom: '12px', opacity: 0.5 }} />
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem' }}>Loading AI Model...</p>
           </div>
         )}
-        
-        <video 
-          ref={videoRef} 
-          autoPlay 
-          playsInline 
-          muted 
-          style={{ 
-            opacity: isStreaming ? 1 : 0, 
+
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted
+          style={{
+            opacity: isStreaming ? 1 : 0,
             width: '100%',
             height: '100%',
             objectFit: 'cover'
-          }} 
+          }}
         />
-        <canvas 
-          ref={canvasRef} 
-          width="640" 
-          height="480" 
-          style={{ 
-            position: 'absolute', 
-            top: 0, 
-            left: 0, 
+        <canvas
+          ref={canvasRef}
+          width="640"
+          height="480"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
             width: '100%',
             height: '100%',
             pointerEvents: 'none',
             zIndex: 10
-          }} 
+          }}
         />
-        
+
         {visualAlert && (
           <div style={{
             position: 'absolute',
@@ -237,12 +273,12 @@ function Detector({ onAlert }) {
 
       <div style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
         <div className="glass-card" style={{ padding: '16px', textAlign: 'center' }}>
-           <div style={{ fontSize: '0.65rem', color: '#64748b', marginBottom: '4px' }}>AI Confidence</div>
-           <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1b4332' }}>94%</div>
+          <div style={{ fontSize: '0.65rem', color: '#64748b', marginBottom: '4px' }}>AI Confidence</div>
+          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1b4332' }}>94%</div>
         </div>
         <div className="glass-card" style={{ padding: '16px', textAlign: 'center' }}>
-           <div style={{ fontSize: '0.65rem', color: '#64748b', marginBottom: '4px' }}>Latency</div>
-           <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#2d6a4f' }}>14ms</div>
+          <div style={{ fontSize: '0.65rem', color: '#64748b', marginBottom: '4px' }}>Latency</div>
+          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#2d6a4f' }}>14ms</div>
         </div>
       </div>
     </div>

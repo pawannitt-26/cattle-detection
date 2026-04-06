@@ -189,9 +189,17 @@ function PestWiki() {
             <button 
               onClick={() => setSelectedPest(null)}
               className="btn-primary"
-              style={{ marginTop: '24px' }}
+              style={{ 
+                marginTop: '32px', 
+                background: '#f8fafc', 
+                color: '#1b4332', 
+                border: '2px solid #e2e8f0',
+                padding: '14px',
+                fontSize: '0.95rem'
+              }}
             >
-              Back to Wiki
+              <ChevronRight size={18} style={{ transform: 'rotate(180deg)', marginRight: '8px' }} />
+              Back to Pest Directory
             </button>
           </div>
         </div>
