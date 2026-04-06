@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
-import { Camera, Shield, ShieldOff, AlertCircle, RefreshCw } from 'lucide-react';
+import { Camera, Shield, ShieldOff, AlertCircle, RefreshCw, Volume2 } from 'lucide-react';
 
 const CATTLE_LABELS = ['cow', 'horse', 'sheep', 'dog', 'goat'];
 const THREAT_LABELS = ['bird', 'cat', 'dog'];
@@ -72,11 +72,25 @@ function Detector({ onAlert }) {
   const startCamera = async () => {
     setCameraError(null);
     
-    // Initialize/Resume audio on user interaction
-    if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-    } else if (audioContextRef.current.state === 'suspended') {
-      audioContextRef.current.resume();
+    // Priming the AudioContext on direct user interaction (Sync)
+    try {
+      if (!audioContextRef.current) {
+        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioContextRef.current.state === 'suspended') {
+        await audioContextRef.current.resume();
+      }
+      // Play a tiny confirmation tick to "unlock" the audio engine
+      const ctx = audioContextRef.current;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      gain.gain.setValueAtTime(0.01, ctx.currentTime);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.05);
+    } catch (e) {
+      console.warn("Audio Context activation failed:", e);
     }
     
     if (!window.isSecureContext) {
@@ -199,9 +213,13 @@ function Detector({ onAlert }) {
               {isStreaming ? <Shield color="#166534" size={20} /> : <ShieldOff color="#991b1b" size={20} />}
             </div>
             <div>
-              <h3 style={{ fontSize: '1rem', color: '#1b4332', fontWeight: 700 }}>AI Scanner</h3>
-              <p style={{ fontSize: '0.75rem', color: '#64748b' }}>
+              <h3 style={{ fontSize: '1rem', color: '#1b4332', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                AI Scanner
+                {isStreaming && <div className="animate-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444' }} />}
+              </h3>
+              <p style={{ fontSize: '0.75rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px' }}>
                 {isStreaming ? 'Detecting...' : 'System Idle'}
+                {isStreaming && <><Volume2 size={12} /> <span style={{ color: '#166534', fontWeight: 600 }}>• Audio Active</span></>}
               </p>
             </div>
           </div>
