@@ -83,8 +83,10 @@ function PwaPrompt() {
 
         <button 
           onClick={handleInstall}
-          className="btn-primary"
           style={{ 
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             gap: '12px', 
             fontSize: '1rem',
             background: 'linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%)',
@@ -95,11 +97,13 @@ function PwaPrompt() {
             color: 'white',
             fontWeight: 700,
             cursor: 'pointer',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            width: '100%',
+            outline: 'none'
           }}
         >
-          <Download size={22} />
-          Add to Home Screen
+          <Download size={22} color="white" />
+          <span>Add to Home Screen</span>
         </button>
       </div>
 
