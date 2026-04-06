@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#2d6a4f" />
-        <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1971/1971168.png" />
+        <link rel="apple-touch-icon" href="/icon-512.png" />
       </head>
       <body>
         <div className="main-wrapper">
